@@ -3,7 +3,7 @@ celery
 configobj
 Django
 django-celery
-jsondict.py
+jsonfiledict.py
 logtool
 MySQL-python
 path.py

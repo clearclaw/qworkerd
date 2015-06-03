@@ -2,7 +2,7 @@
 
 import itertools, logging, logtool, os
 from path import Path
-from jsondict import JsonDict
+from jsonfiledict import JsonFileDict
 
 LOG = logging.getLogger (__name__)
 
@@ -49,8 +49,8 @@ class TaskContext (object):
     self.space_empty (self.task_dir)
     for d in ["data", "result", "report"]:
       (self.task_dir / d).makedirs_p ()
-    JsonDict (self.task_dir / "report" / "job.json", self.job)
-    JsonDict (self.task_dir / "report" / "request.json", self.context)
+    JsonFileDict (self.task_dir / "report" / "job.json", self.job)
+    JsonFileDict (self.task_dir / "report" / "request.json", self.context)
 
   @logtool.log_call
   def __enter__ (self):

@@ -1,0 +1,102 @@
+[loggers]
+keys = boto, django, django.db.backends, django.request, logtool, requests, root, statsd
+
+[handlers]
+keys = console, console_colour, syslog
+
+[formatters]
+keys = generic, colour
+
+[logger_root]
+level = DEBUG
+handlers = ${QLOG.LOGGING.HANDLER}
+
+[logger_logtool]
+level = DEBUG
+handlers = ${QLOG.LOGGING.HANDLER}
+qualname = logtool
+propagate = 0
+
+[logger_logtool.log_wrap]
+level = DEBUG
+handlers = ${QLOG.LOGGING.HANDLER}
+qualname = logtool.log_wrap
+propagate = 0
+
+[logger_logtool.log_fault_impl]
+level = DEBUG
+handlers = ${QLOG.LOGGING.HANDLER}
+qualname = logtool.log_fault_impl
+propagate = 0
+
+[logger_requests]
+level = DEBUG
+handlers = ${QLOG.LOGGING.HANDLER}
+qualname = requests
+propagate = 0
+
+[logger_boto]
+level = INFO
+handlers = ${QLOG.LOGGING.HANDLER}
+qualname = boto
+propagate = 0
+
+[logger_statsd]
+level = WARN
+handlers = ${QLOG.LOGGING.HANDLER}
+qualname = statsd
+propagate = 0
+
+[logger_django]
+level = DEBUG
+handlers = ${QLOG.LOGGING.HANDLER}
+qualname = django
+propagate = 1
+
+[logger_django.db]
+level = DEBUG
+handlers = ${QLOG.LOGGING.HANDLER}
+qualname = django.db
+propagate = 0
+
+[logger_django.db.backends]
+level = DEBUG
+handlers = ${QLOG.LOGGING.HANDLER}
+qualname = django.db.backends
+propagate = 0
+
+[logger_django.request]
+level = DEBUG
+handlers = ${QLOG.LOGGING.HANDLER}
+qualname = django.request
+propagate = 0
+
+[handler_console]
+class = StreamHandler
+level = DEBUG
+formatter = generic
+args = ()
+
+[handler_console_colour]
+class = rainbow_logging_handler.RainbowLoggingHandler
+stream = sys.stderr
+level = DEBUG
+args = (sys.stderr, "")
+
+[handler_syslog]
+class = handlers.SysLogHandler
+level = DEBUG
+formatter = generic
+args = (('127.0.0.1', handlers.SYSLOG_UDP_PORT), handlers.SysLogHandler.LOG_LOCAL3)
+
+[formatter_generic]
+class = logging.Formatter
+format = %(asctime)s %(processName)s[%(process)d] %(levelname)s <%(module)s:%(funcName)s(%(lineno)d)> %(message)s
+datefmt = %Y-%m-%d %H:%M:%S
+use_color = 0
+
+[formatter_colour]
+class = logging.Formatter
+format = %(asctime)s %(levelname)s <%(name)s::%(module)s:%(funcName)s(%(lineno)d)> %(message)s
+datefmt = %Y-%m-%d %H:%M:%S
+use_color = 1

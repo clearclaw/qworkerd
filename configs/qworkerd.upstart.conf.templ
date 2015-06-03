@@ -1,0 +1,9 @@
+# /etc/init/qworkerd.conf
+
+description "qworkerd"
+author "J C Lawrence <claw@kanga.nu>"
+
+env USER=${QWORKERD.UNIX.USER}
+env GROUP=${QWORKERD.UNIX.GROUP}
+
+exec celery -A qworkerd.main worker -c 1 -l debug

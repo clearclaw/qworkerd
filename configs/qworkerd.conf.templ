@@ -1,0 +1,36 @@
+# BROKER_URL = "redis://localhost:6379/1"
+BROKER_URL = "${QWORKERD.BROKER_URL}"
+#CELERY_RESULT_BACKEND = "db+mysql://root:root@localhost/qeventlog"
+
+WORKING_DIRECTORY = "${QWORKERD.WORKING_DIRECTORY}"
+NUKE_WORKING_DIRECTORY = ${QWORKERD.JOB.WORKSPACE_NUKE}
+
+# Entry for logging exceptions to Sentry
+RAVEN_CONFIG = {
+  "dsn": "sync+${QWORKERD.SENTRY.DSN}",
+}
+
+# Number of free disk blocks required before a job will be allowed to
+# be run.
+JOB_MIN_FREE_DISK_BLOCKS = ${QWORKERD.JOB.MINIMUM_FREE_DISK_BLOCKS}
+JOB_NOCLEAN_FILE = "/etc/qworkerd/JOB.NOCLEAN"
+
+#
+#JOB_HANDLERS = {
+#  "generate_mesh_bigmesh": "meshtool",
+#  "reprocess_mesh_bigmesh": "meshtool",
+#  "generate_mesh": "meshtool",
+#  "reprocess_mesh": "meshtool",
+#  "rewrite_obj": "rewritetool",
+#}
+
+# Task hard time limit in seconds. The worker processing the task will
+# be killed and replaced with a new one when this is exceeded.
+CELERYD_TASK_TIME_LIMIT = ${QWORKERD.JOB.TIME_KILLAFTER}
+
+# Task soft time limit in seconds.
+# The SoftTimeLimitExceeded exception will be raised when this is
+# exceeded. The task can catch this to e.g. clean up before the hard
+# time limit comes.
+# http://celery.readthedocs.org/en/latest/configuration.html#celeryd-task-soft-time-limit
+CELERYD_TASK_SOFT_TIME_LIMIT = ${QWORKERD.JOB.TIME_WARNING}
