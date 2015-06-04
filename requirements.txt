@@ -1,13 +1,9 @@
-addict
 celery
-configobj
 Django
 django-celery
-jsonfiledict.py
+jsonfiledict
 logtool
 MySQL-python
-path.py
 pyver
 raven
-retryp
 setuptools_lint

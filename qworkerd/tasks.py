@@ -2,9 +2,7 @@
 
 import datetime, logging, logtool, psutil, socket
 from django.conf import settings
-# from qworkerd.main import app
 from celery import current_app
-from addict import Dict
 
 LOG = logging.getLogger (__name__)
 
@@ -14,8 +12,8 @@ def nice_date (ut):
     float (ut)).strftime ("%Y-%m-%d %H:%M:%S")
 
 @logtool.log_call
-@current_app.task (bind = True)
-def host_status (this):
+@current_app.task
+def host_status ():
   rc = {
     "hostname": socket.gethostname (),
     "cpu": {
