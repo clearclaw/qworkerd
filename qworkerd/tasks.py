@@ -1,54 +1,60 @@
-#!/usr/bin/env python
+#! /usr/bin/env python
 
-import logging, logtool, os
-import qeventlog.qetask # pylint: disable=W0611
+import datetime, logging, logtool, psutil, socket
 from django.conf import settings
-from qworkerd.main import app # pylint: disable=W0611
+# from qworkerd.main import app
 from celery import current_app
-from qworkerd.taskcontext import TaskContext
-from qworkerd.process import process
+from addict import Dict
 
 LOG = logging.getLogger (__name__)
 
-class MpTaskException (Exception):
-  pass
-
 @logtool.log_call
-def search_os_path (name, env_path = None, exts = ('',)):
-  s_path = env_path or os.environ.get ("PATH", "")
-  exts_n = [os.extsep + (ext if not ext.startswith (os.extsep)
-                         else ext[len (os.extsep):])
-            for ext in exts if ext is not ""]
-  if "" in exts:
-    exts_n.append ("")
-  exts = exts_n
-  for d in s_path.split (os.pathsep):
-    for ext in exts:
-      binpath = os.path.join (d, name) + ext
-      if os.path.exists (binpath):
-        return os.path.abspath (binpath)
-  return None
-
-@logtool.log_call
-def get_exebin (exe):
-  exebin = search_os_path (exe, exts = (".py", ".sh", "",))
-  if exebin:
-    return exebin
-  msg = "Failed to fined executable for: %s" % exe
-  LOG.error (msg)
-  raise MpTaskException (msg)
+def nice_date (ut):
+  return datetime.datetime.fromtimestamp (
+    float (ut)).strftime ("%Y-%m-%d %H:%M:%S")
 
 @logtool.log_call
 @current_app.task (bind = True)
-def do (this, task, **kwargs):
-  with TaskContext (settings, this.request, kwargs) as job_dir:
-    exebin = get_exebin (task)
-    LOG.info ("Start: %s", exebin)
-    with process ([exebin,],
-                  proc_args = {"shell": True,
-                               "universal_newlines": True,
-                               "cwd": job_dir},
-                  cwd = job_dir,
-                  pidfile = job_dir,) as proc:
-      rc = proc.wait ()
-      LOG.info ("End: %s RC: %s", exebin, rc)
+def host_status (this):
+  rc = {
+    "hostname": socket.gethostname (),
+    "cpu": {
+      "count": psutil.cpu_count (),
+      "times": psutil.cpu_times (),
+      "percent": psutil.cpu_percent (percpu = True),
+      },
+    "memory": {
+      "virtual": psutil.virtual_memory (),
+      "swap": psutil.swap_memory (),
+      },
+    "net": psutil.net_io_counters (),
+    "uptime": {
+      "ut": psutil.boot_time (),
+      "since": nice_date (psutil.boot_time ()),
+      },
+    "disk": {},
+    "process": {},
+    }
+  for part in psutil.disk_partitions ():
+    rc["disk"]["mounts"] = {
+      part.mountpoint: psutil.disk_usage (part.mountpoint),
+    }
+  for disk, io in psutil.disk_io_counters (perdisk = True).items ():
+    rc["disk"]["io"] = {
+      disk: io
+    }
+  for proc in psutil.process_iter ():
+    if proc.username == settings.UNIX_USER:
+      rc["process"]["proc.pid"] = {
+        "name": proc.name,
+        "exe": proc.exe,
+        "cmdline": proc.cmdline,
+        "create_time": proc.create_time (),
+        "since": (nice_date (proc.create_time ())),
+        "status": proc.status (),
+        "cpu.times": proc.cpu_times (),
+        "cpu.percent": proc.cpu_percent (),
+        "memory.info": proc.memory_info_ex (),
+        "percent": proc.memory_percent (),
+      }
+  return rc

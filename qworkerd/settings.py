@@ -102,6 +102,13 @@ CELERY_SEND_TASK_ERROR_EMAILS = False
 ##
 ## CELERY_ANNOTATIONS = {"*": {"on_failure": mp_on_failure}}
 
+# A sequence of modules to import when the worker starts.
+CELERY_IMPORTS = ("qeventlog.qetask", "qworkerd.tasks",)
+
+# Exact same semantics as CELERY_IMPORTS, but can be used as a means
+# to have different import categories.
+CELERY_INCLUDE = []
+
 # https://github.com/ssaw/celery-statsd
 STATSD_HOST = "127.0.0.1"
 STATSD_PORT = 8125
@@ -130,6 +137,7 @@ REQUIRED_VARIABLES = [
   "CELERYD_TASK_TIME_LIMIT",
   "CELERYD_TASK_SOFT_TIME_LIMIT",
 #  "CELERY_RESULT_BACKEND",
+  "CELERY_INCLUDE",
 ]
 
 @logtool.log_call

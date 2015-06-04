@@ -1,6 +1,6 @@
 # BROKER_URL = "redis://localhost:6379/1"
 BROKER_URL = "${QWORKERD.BROKER_URL}"
-#CELERY_RESULT_BACKEND = "db+mysql://root:root@localhost/qeventlog"
+CELERY_RESULT_BACKEND = "db+mysql://root:root@localhost/qeventlog"
 
 WORKING_DIRECTORY = "${QWORKERD.WORKING_DIRECTORY}"
 NUKE_WORKING_DIRECTORY = ${QWORKERD.JOB.WORKSPACE_NUKE}
@@ -34,3 +34,10 @@ CELERYD_TASK_TIME_LIMIT = ${QWORKERD.JOB.TIME_KILLAFTER}
 # time limit comes.
 # http://celery.readthedocs.org/en/latest/configuration.html#celeryd-task-soft-time-limit
 CELERYD_TASK_SOFT_TIME_LIMIT = ${QWORKERD.JOB.TIME_WARNING}
+
+# A sequence of modules to import when the worker starts.
+CELERY_INCLUDE = [${QWORKERD.JOB.INCLUDE}]
+
+# Unix user and group that will run as
+UNIX_USER = "${QWORKERD.UNIX.USER}"
+UNIX_GROUP = "${QWORKERD.UNIX.GROUP}"
