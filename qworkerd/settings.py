@@ -18,9 +18,7 @@ DEBUG = False
 INSTALLED_APPS = (
   "raven.contrib.django.raven_compat",
   "rest_framework",
-
   "djcelery",
-
   "qworkerd",
 )
 MIDDLEWARE_CLASSES = ()
@@ -51,9 +49,6 @@ CELERY_ACCEPT_CONTENT = ["json",]  # Ignore other content
 #def my_on_failure(self, exc, task_id, args, kwargs, einfo):
 #    print("Oh no! Task failed: {0!r}".format(exc))
 #CELERY_ANNOTATIONS = {"*": {"on_failure": my_on_failure}}
-
-# Number of simultaneous jobs to run on the worker
-CELERYD_CONCURRENCY = 1
 
 # Number of jobs for the worker to take off the queue at a time.
 CELERYD_PREFETCH_MULTIPLIER = 1
@@ -88,6 +83,20 @@ CELERY_SEND_TASK_SENT_EVENT = True
 # Enables error emails.
 CELERY_SEND_TASK_ERROR_EMAILS = False
 
+# Number of simultaneous jobs to run on the worker
+CELERYD_CONCURRENCY = 1
+
+# Task hard time limit in seconds. The worker processing the task will
+# be killed and replaced with a new one when this is exceeded.
+CELERYD_TASK_TIME_LIMIT = 13 * 60 * 60
+
+# Task soft time limit in seconds.
+# The SoftTimeLimitExceeded exception will be raised when this is
+# exceeded. The task can catch this to e.g. clean up before the hard
+# time limit comes.
+# http://celery.readthedocs.org/en/latest/configuration.html#celeryd-task-soft-time-limit
+CELERYD_TASK_SOFT_TIME_LIMIT = 12 * 60 * 60
+
 ## # This setting can be used to rewrite any task attribute from the
 ## # configuration. The setting can be a dict, or a list of annotation
 ## # objects that filter for tasks and return a map of attributes to
@@ -121,21 +130,15 @@ EXTERNAL_CONFIG = "/etc/qworkerd/qworkerd.conf"
 execfile (EXTERNAL_CONFIG)
 
 DESIRED_VARIABLES = [
+  "SECRET_KEY",
   "LOGGING",
+  "CELERYD_CONCURRENCY",
+  "CELERYD_TASK_TIME_LIMIT",
+  "CELERYD_TASK_SOFT_TIME_LIMIT",
 ]
 REQUIRED_VARIABLES = [
   "RAVEN_CONFIG",
   "BROKER_URL",
-
-  "CELERYD_TASK_TIME_LIMIT",
-  "CELERYD_TASK_SOFT_TIME_LIMIT",
-  "WORKING_DIRECTORY",
-  "NUKE_WORKING_DIRECTORY",
-  "RAVEN_CONFIG",
-  "JOB_MIN_FREE_DISK_BLOCKS",
-  "JOB_NOCLEAN_FILE",
-  "CELERYD_TASK_TIME_LIMIT",
-  "CELERYD_TASK_SOFT_TIME_LIMIT",
 #  "CELERY_RESULT_BACKEND",
   "CELERY_INCLUDE",
 ]

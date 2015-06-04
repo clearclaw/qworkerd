@@ -1,28 +1,19 @@
-# BROKER_URL = "redis://localhost:6379/1"
+# Where is RabbitMQ?
 BROKER_URL = "${QWORKERD.BROKER_URL}"
+
+# Not required -- must use SQLAlechemy-style URI
 CELERY_RESULT_BACKEND = "db+mysql://root:root@localhost/qeventlog"
 
-WORKING_DIRECTORY = "${QWORKERD.WORKING_DIRECTORY}"
-NUKE_WORKING_DIRECTORY = ${QWORKERD.JOB.WORKSPACE_NUKE}
+# Not clear this is needed in the queue case?
+SECRET_KEY = "${QWORKERD.SECRET_KEY}"
 
 # Entry for logging exceptions to Sentry
 RAVEN_CONFIG = {
   "dsn": "sync+${QWORKERD.SENTRY.DSN}",
 }
 
-# Number of free disk blocks required before a job will be allowed to
-# be run.
-JOB_MIN_FREE_DISK_BLOCKS = ${QWORKERD.JOB.MINIMUM_FREE_DISK_BLOCKS}
-JOB_NOCLEAN_FILE = "/etc/qworkerd/JOB.NOCLEAN"
-
-#
-#JOB_HANDLERS = {
-#  "generate_mesh_bigmesh": "meshtool",
-#  "reprocess_mesh_bigmesh": "meshtool",
-#  "generate_mesh": "meshtool",
-#  "reprocess_mesh": "meshtool",
-#  "rewrite_obj": "rewritetool",
-#}
+# Number of simultaneous jobs to run on the worker
+CELERYD_CONCURRENCY = ${QWORKERD.JOB.PARALLEL}
 
 # Task hard time limit in seconds. The worker processing the task will
 # be killed and replaced with a new one when this is exceeded.
