@@ -3,6 +3,7 @@
 import logging, logtool, sys
 
 LOG = logging.getLogger (__name__)
+from path import Path
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
