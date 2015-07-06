@@ -18,7 +18,7 @@ DEBUG = False
 # Application definition
 INSTALLED_APPS = (
   "raven.contrib.django.raven_compat",
-  "rest_framework",
+#  "rest_framework",
   "djcelery",
   "qworkerd",
 )
@@ -124,6 +124,10 @@ STATSD_HOST = "127.0.0.1"
 STATSD_PORT = 8125
 CELERYD_STATS_PREFIX = "qworkerd."
 
+# Time for Django
+TIME_ZONE = None
+USE_TZ = False
+
 LOGGING = "/etc/qworkerd/logging.conf"
 LOGGING_CONFIG = "qworkerd.logs.logging_loader"
 
@@ -143,6 +147,12 @@ REQUIRED_VARIABLES = [
 #  "CELERY_RESULT_BACKEND",
   "CELERY_INCLUDE",
 ]
+
+# Add the task's settings
+import importlib
+for n in CELERY_INCLUDE:
+  mod = importlib.import_module (n + ".settings")
+  mod.install ()
 
 @logtool.log_call
 def check_vars (wanted, provided):
