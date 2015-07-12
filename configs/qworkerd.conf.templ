@@ -5,42 +5,36 @@ from path import Path
 LOG = logging.getLogger (__name__)
 
 # Where is RabbitMQ?
-BROKER_URL = "${QWORKERD.BROKER_URL}"
+BROKER_URL = "${qworkerd_broker_url}"
 
 # Not required -- must use SQLAlechemy-style URI
-CELERY_RESULT_BACKEND = "db+mysql://root:root@localhost/qeventlog"
+# CELERY_RESULT_BACKEND = "db+mysql://root:root@localhost/qeventlog"
 
 # Not clear this is needed in the queue case?
-SECRET_KEY = "${QWORKERD.SECRET_KEY}"
+SECRET_KEY = "${qworkerd_secret_key}"
 
 # Entry for logging exceptions to Sentry
 RAVEN_CONFIG = {
-  "dsn": "sync+${QWORKERD.SENTRY.DSN}",
+  "dsn": "sync+${qworkerd_sentry_dsn}",
 }
 
 # Number of simultaneous jobs to run on the worker
-CELERYD_CONCURRENCY = ${QWORKERD.JOB.PARALLEL}
+CELERYD_CONCURRENCY = ${qworkerd_job_parallel}
 
 # Task hard time limit in seconds. The worker processing the task will
 # be killed and replaced with a new one when this is exceeded.
-CELERYD_TASK_TIME_LIMIT = ${QWORKERD.JOB.TIME_KILLAFTER}
+CELERYD_TASK_TIME_LIMIT = ${qworkerd_job_time_killafter}
 
 # Task soft time limit in seconds.
 # The SoftTimeLimitExceeded exception will be raised when this is
 # exceeded. The task can catch this to e.g. clean up before the hard
 # time limit comes.
 # http://celery.readthedocs.org/en/latest/configuration.html#celeryd-task-soft-time-limit
-CELERYD_TASK_SOFT_TIME_LIMIT = ${QWORKERD.JOB.TIME_WARNING}
+CELERYD_TASK_SOFT_TIME_LIMIT = ${qworkerd_job_time_warning}
 
 # A sequence of modules to import when the worker starts.
-CELERY_INCLUDE = [${QWORKERD.JOB.INCLUDE}]
+CELERY_INCLUDE = [${qworkerd_job_include}]
 
 # Unix user and group that will run as
-UNIX_USER = "${QWORKERD.UNIX.USER}"
-UNIX_GROUP = "${QWORKERD.UNIX.GROUP}"
-
-# Now load all the plugins
-for conf in Path ("/etc/qworkerd/plugins").glob ("*.conf"):
-  execfile (conf)
-  
-  
+UNIX_USER = "${qworkerd_unix_user}"
+UNIX_GROUP = "${qworkerd_unix_group}"

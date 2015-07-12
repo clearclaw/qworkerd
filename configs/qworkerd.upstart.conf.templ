@@ -3,7 +3,7 @@
 description "qworkerd"
 author "J C Lawrence <claw@kanga.nu>"
 
-env USER=${QWORKERD.UNIX.USER}
-env GROUP=${QWORKERD.UNIX.GROUP}
+env USER=${qworkerd_unix_user}
+env GROUP=${qworkerd_unix_group}
 
 exec celery -A qworkerd.main worker -l debug

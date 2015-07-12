@@ -9,65 +9,65 @@ keys = generic, colour
 
 [logger_root]
 level = DEBUG
-handlers = ${QLOG.LOGGING.HANDLER}
+handlers = ${qworkerd_log_handler}
 
 [logger_logtool]
 level = DEBUG
-handlers = ${QLOG.LOGGING.HANDLER}
+handlers = ${qworkerd_log_handler}
 qualname = logtool
 propagate = 0
 
 [logger_logtool.log_wrap]
 level = DEBUG
-handlers = ${QLOG.LOGGING.HANDLER}
+handlers = ${qworkerd_log_handler}
 qualname = logtool.log_wrap
 propagate = 0
 
 [logger_logtool.log_fault_impl]
 level = DEBUG
-handlers = ${QLOG.LOGGING.HANDLER}
+handlers = ${qworkerd_log_handler}
 qualname = logtool.log_fault_impl
 propagate = 0
 
 [logger_requests]
 level = DEBUG
-handlers = ${QLOG.LOGGING.HANDLER}
+handlers = ${qworkerd_log_handler}
 qualname = requests
 propagate = 0
 
 [logger_boto]
 level = INFO
-handlers = ${QLOG.LOGGING.HANDLER}
+handlers = ${qworkerd_log_handler}
 qualname = boto
 propagate = 0
 
 [logger_statsd]
 level = WARN
-handlers = ${QLOG.LOGGING.HANDLER}
+handlers = ${qworkerd_log_handler}
 qualname = statsd
 propagate = 0
 
 [logger_django]
 level = DEBUG
-handlers = ${QLOG.LOGGING.HANDLER}
+handlers = ${qworkerd_log_handler}
 qualname = django
 propagate = 1
 
 [logger_django.db]
 level = DEBUG
-handlers = ${QLOG.LOGGING.HANDLER}
+handlers = ${qworkerd_log_handler}
 qualname = django.db
 propagate = 0
 
 [logger_django.db.backends]
 level = DEBUG
-handlers = ${QLOG.LOGGING.HANDLER}
+handlers = ${qworkerd_log_handler}
 qualname = django.db.backends
 propagate = 0
 
 [logger_django.request]
 level = DEBUG
-handlers = ${QLOG.LOGGING.HANDLER}
+handlers = ${qworkerd_log_handler}
 qualname = django.request
 propagate = 0
 
