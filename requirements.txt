@@ -8,3 +8,4 @@ pyver
 raven
 setuptools_lint
 rainbow_logging_handler
+cfgtool

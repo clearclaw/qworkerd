@@ -33,7 +33,7 @@ CELERYD_TASK_TIME_LIMIT = ${qworkerd_job_time_killafter}
 CELERYD_TASK_SOFT_TIME_LIMIT = ${qworkerd_job_time_warning}
 
 # A sequence of modules to import when the worker starts.
-CELERY_INCLUDE = [${qworkerd_job_include}]
+CELERY_INCLUDE = "${qworkerd_job_include}".split (",")
 
 # Unix user and group that will run as
 UNIX_USER = "${qworkerd_unix_user}"
