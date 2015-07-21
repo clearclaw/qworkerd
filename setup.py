@@ -18,7 +18,8 @@ except ImportError:
 from setuptools import setup, find_packages
 import glob
 
-__version__, __version_info__ = pyver.get_version (pkg = "qworkerd")
+__version__, __version_info__ = pyver.get_version (pkg = "qworkerd",
+                                                   public = True)
 
 setup (
     name = "qworkerd",
