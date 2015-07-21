@@ -3,4 +3,3 @@
 install -d -g root -o root -m 0755 -p /etc/qworkerd
 install -D -g root -o root -m 0644 -p -t /etc/qworkerd *.templ
 install -D -g root -o root -m 0644 -p qworkerd.cfgtool /etc/cfgtool/module.d/qworkerd
-install -D -g root -o root -m 0644 -p qworkerd.upstart.conf.templ /etc/init/qworkerd.conf.templ

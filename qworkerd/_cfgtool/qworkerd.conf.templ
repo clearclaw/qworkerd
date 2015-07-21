@@ -7,8 +7,10 @@ LOG = logging.getLogger (__name__)
 # Where is RabbitMQ?
 BROKER_URL = "${qworkerd_broker_url}"
 
-# Not required -- must use SQLAlechemy-style URI
+# The backend used to store task results (tombstones). 
 # CELERY_RESULT_BACKEND = "db+mysql://root:root@localhost/qeventlog"
+# CELERY_RESULT_BACKEND = "cache+memcached://127.0.0.1:11211/"
+CELERY_RESULT_BACKEND = "${qworkerd_result_backend}"
 
 # Not clear this is needed in the queue case?
 SECRET_KEY = "${qworkerd_secret_key}"

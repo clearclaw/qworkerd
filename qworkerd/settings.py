@@ -3,7 +3,6 @@
 import logging, logtool, sys
 
 LOG = logging.getLogger (__name__)
-from path import Path
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
@@ -37,6 +36,7 @@ CELERYD_MAX_TASKS_PER_CHILD = 5
 # Let"s use SQL for the results?  We need SQL that isn't Django specific.
 # CELERY_RESULT_BACKEND = "db+mysql://task:task@localhost/task"
 # CELERY_RESULT_BACKEND = "djcelery.backends.database:DatabaseBackend"
+# CELERY_RESULT_BACKEND = "cache+memcached://127.0.0.1:11211/"
 
 # django-celery also ships with a scheduler that stores the schedule
 # in the Django database:
@@ -113,7 +113,7 @@ CELERYD_TASK_SOFT_TIME_LIMIT = 12 * 60 * 60
 ## CELERY_ANNOTATIONS = {"*": {"on_failure": mp_on_failure}}
 
 # A sequence of modules to import when the worker starts.
-CELERY_IMPORTS = ("qeventlog.qetask", "qworkerd.tasks",)
+CELERY_IMPORTS = ("qeventlog.qetask",)
 
 # Exact same semantics as CELERY_IMPORTS, but can be used as a means
 # to have different import categories.
@@ -135,6 +135,7 @@ EXTERNAL_CONFIG = "/etc/qworkerd/qworkerd.conf"
 execfile (EXTERNAL_CONFIG)
 
 DESIRED_VARIABLES = [
+  "CELERY_RESULT_BACKEND",
   "SECRET_KEY",
   "LOGGING",
   "CELERYD_CONCURRENCY",
