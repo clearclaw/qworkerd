@@ -17,8 +17,8 @@ DEBUG = False
 # Application definition
 INSTALLED_APPS = (
   "raven.contrib.django.raven_compat",
-#  "rest_framework",
   "djcelery",
+
   "qworkerd",
 )
 MIDDLEWARE_CLASSES = ()
@@ -125,7 +125,7 @@ STATSD_PORT = 8125
 CELERYD_STATS_PREFIX = "qworkerd."
 
 # Time for Django
-TIME_ZONE = None
+TIME_ZONE = "UTC"
 USE_TZ = False
 
 LOGGING = "/etc/qworkerd/logging.conf"

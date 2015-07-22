@@ -16,7 +16,7 @@ kombu==3.0.26
 logilab-common==1.0.2
 logtool==0.2.22
 logutils==0.3.3
-MySQL-python==1.2.5
+psycopg2
 path.py==7.4
 psutil==3.1.1
 pylint==1.4.4
