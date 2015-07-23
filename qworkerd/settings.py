@@ -38,6 +38,11 @@ CELERYD_MAX_TASKS_PER_CHILD = 5
 # CELERY_RESULT_BACKEND = "djcelery.backends.database:DatabaseBackend"
 # CELERY_RESULT_BACKEND = "cache+memcached://127.0.0.1:11211/"
 
+# Time (in seconds, or a timedelta object) for when after stored task
+# tombstones will be deleted.
+# CELERY_TASK_RESULT_EXPIRES = 0  # Never
+CELERY_TASK_RESULT_EXPIRES = 30 * 24 * 60 * 60
+
 # django-celery also ships with a scheduler that stores the schedule
 # in the Django database:
 #CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
@@ -45,11 +50,6 @@ CELERYD_MAX_TASKS_PER_CHILD = 5
 CELERY_RESULT_SERIALIZER = "json"
 CELERY_TASK_SERIALIZER = "json"
 CELERY_ACCEPT_CONTENT = ["json",]  # Ignore other content
-
-# Need to investigate failure handling.
-#def my_on_failure(self, exc, task_id, args, kwargs, einfo):
-#    print("Oh no! Task failed: {0!r}".format(exc))
-#CELERY_ANNOTATIONS = {"*": {"on_failure": my_on_failure}}
 
 # Number of jobs for the worker to take off the queue at a time.
 CELERYD_PREFETCH_MULTIPLIER = 1
@@ -65,9 +65,6 @@ CELERY_TRACK_STARTED = True
 # Late ack means the task messages will be acknowledged after the task
 # has been executed, not just before, which is the default behavior.
 CELERY_ACKS_LATE = True
-
-# Keep results forever
-CELERY_TASK_RESULT_EXPIRES = 0  # Never
 
 # If set to True, result messages will be persistent. This means the
 # messages will not be lost after a broker restart. The default is for
@@ -112,6 +109,18 @@ CELERYD_TASK_SOFT_TIME_LIMIT = 12 * 60 * 60
 ##
 ## CELERY_ANNOTATIONS = {"*": {"on_failure": mp_on_failure}}
 
+# Maximum number of connections available in the Redis connection pool
+# used for sending and retrieving results.
+# CELERY_REDIS_MAX_CONNECTIONS = 
+
+# This option enables so that every worker has a dedicated queue, so
+# that tasks can be routed to specific workers. 
+CELERY_WORKER_DIRECT = True
+
+# The name of the default queue used by .apply_async if the message
+# has no route or no custom queue has been specified.
+CELERY_DEFAULT_QUEUE = "qworkerd"
+
 # A sequence of modules to import when the worker starts.
 CELERY_IMPORTS = ("qeventlog.qetask",)
 
@@ -135,6 +144,7 @@ EXTERNAL_CONFIG = "/etc/qworkerd/qworkerd.conf"
 execfile (EXTERNAL_CONFIG)
 
 DESIRED_VARIABLES = [
+  "CELERY_DEFAULT_QUEUE",
   "CELERY_RESULT_BACKEND",
   "SECRET_KEY",
   "LOGGING",
