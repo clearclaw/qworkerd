@@ -3,7 +3,7 @@ amqp==1.4.6
 anyjson==0.3.3
 architect==0.5.1
 astroid==1.3.6
-atomictempfile==0.1.1
+atomictempfile==0.1.2
 billiard==3.3.0.20
 boto==2.38.0
 celery==3.1.18
@@ -23,7 +23,6 @@ kombu==3.0.26
 logilab-common==1.0.2
 logtool==0.2.22
 logutils==0.3.3
-MySQL-python==1.2.5
 path.py==7.4
 pexpect==3.3
 pickleshare==0.5
@@ -35,10 +34,10 @@ pylint==1.4.4
 python-memcached==1.54
 pytz==2015.4
 pyver==1.0.31
-qeventlog==0.1.54
-qworkerd==0.1.18
+qeventlog==0.1.55
 rainbow-logging-handler==2.2.2
 raven==5.5.0
+retryp==0.1.12
 setuptools-lint==0.3
 simplegeneric==0.8.1
 six==1.9.0
