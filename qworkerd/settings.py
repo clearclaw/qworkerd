@@ -82,7 +82,7 @@ CELERY_SEND_TASK_SENT_EVENT = True
 CELERY_SEND_TASK_ERROR_EMAILS = False
 
 # Number of simultaneous jobs to run on the worker
-CELERYD_CONCURRENCY = 1
+# CELERYD_CONCURRENCY = 1
 
 # Task hard time limit in seconds. The worker processing the task will
 # be killed and replaced with a new one when this is exceeded.
