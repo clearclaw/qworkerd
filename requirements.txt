@@ -5,25 +5,30 @@
 #    pip-compile requirements.in
 #
 addict==0.4.0
-amqp==1.4.6               # via kombu
-anyjson==0.3.3            # via kombu
-billiard==3.3.0.20        # via celery
+amqp==1.4.6               # via kombu, qeventlog
+anyjson==0.3.3            # via kombu, qeventlog
+architect==0.5.1          # via qeventlog
+billiard==3.3.0.20        # via celery, qeventlog
 celery==3.1.18
 cfgtool==0.1.17
-clip.py==0.3.0            # via cfgtool
-colorama==0.3.3           # via rainbow-logging-handler
-configobj==5.0.6          # via cfgtool
+clip.py==0.3.0            # via cfgtool, qeventlog
+colorama==0.3.3           # via qeventlog, rainbow-logging-handler
+configobj==5.0.6          # via cfgtool, qeventlog
 django-celery==3.1.16
+django-model-utils==2.3.1  # via qeventlog
 django==1.8.3
-kombu==3.0.26             # via celery
+kombu==3.0.26             # via celery, qeventlog
 logtool==0.2.22
-logutils==0.3.3           # via rainbow-logging-handler
+logutils==0.3.3           # via qeventlog, rainbow-logging-handler
 path.py==7.4
 psutil==3.1.1
-pytz==2015.4              # via celery
+psycopg2==2.6.1           # via qeventlog
+pytz==2015.4              # via celery, qeventlog
 pyver==1.0.31
+qeventlog==0.1.57
 rainbow-logging-handler==2.2.2
 raven==5.5.0
-six==1.9.0                # via cfgtool, configobj
+retryp==0.1.12            # via qeventlog
+six==1.9.0                # via cfgtool, configobj, qeventlog
 termcolor==1.1.0
-wrapt==1.10.5             # via cfgtool, logtool
+wrapt==1.10.5             # via cfgtool, logtool, qeventlog, retryp

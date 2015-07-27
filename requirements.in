@@ -1,12 +1,13 @@
+Django
 addict
 celery
 cfgtool
 django-celery
-Django
 logtool
 path.py
 psutil
 pyver
+qeventlog
 rainbow-logging-handler
 raven
 termcolor
