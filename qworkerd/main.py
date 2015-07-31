@@ -2,7 +2,7 @@
 
 import logging, logtool, os, psutil, socket
 from celery import Celery
-from celery.signals import celeryd_after_setup, setup_logging
+from celery.signals import setup_logging
 from django.conf import settings
 
 LOG = logging.getLogger (__name__)
@@ -19,14 +19,6 @@ app.set_current ()
 def setup_logging_handler (**kwargs): # pylint: disable=W0613
   logging.config.fileConfig (DEFAULT_LOGCONF,
                              disable_existing_loggers = False)
-
-# Replaced by config setting?                             
-#@celeryd_after_setup.connect
-## @logtool.log_call
-#def setup_direct_queue (sender, instance, **kwargs): # pylint: disable=W0613
-#  # sender is the nodename of the worker
-#  queue_name = '{0}.dq'.format (sender)
-#  instance.app.amqp.queues.select_add (queue_name)
 
 @app.task
 @logtool.log_call

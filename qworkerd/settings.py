@@ -111,10 +111,10 @@ CELERYD_TASK_SOFT_TIME_LIMIT = 12 * 60 * 60
 
 # Maximum number of connections available in the Redis connection pool
 # used for sending and retrieving results.
-# CELERY_REDIS_MAX_CONNECTIONS = 
+# CELERY_REDIS_MAX_CONNECTIONS =
 
 # This option enables so that every worker has a dedicated queue, so
-# that tasks can be routed to specific workers. 
+# that tasks can be routed to specific workers.
 CELERY_WORKER_DIRECT = True
 
 # The name of the default queue used by .apply_async if the message
@@ -122,7 +122,7 @@ CELERY_WORKER_DIRECT = True
 CELERY_DEFAULT_QUEUE = "qworkerd"
 
 # A sequence of modules to import when the worker starts.
-CELERY_IMPORTS = ("qeventlog.qetask",)
+CELERY_IMPORTS = ("qeventlog.qetask", "celery_statsd")
 
 # Exact same semantics as CELERY_IMPORTS, but can be used as a means
 # to have different import categories.
@@ -151,11 +151,11 @@ DESIRED_VARIABLES = [
   "CELERYD_CONCURRENCY",
   "CELERYD_TASK_TIME_LIMIT",
   "CELERYD_TASK_SOFT_TIME_LIMIT",
+  "CELERYD_STATS_PREFIX",
 ]
 REQUIRED_VARIABLES = [
   "RAVEN_CONFIG",
   "BROKER_URL",
-#  "CELERY_RESULT_BACKEND",
   "CELERY_INCLUDE",
 ]
 

@@ -1,12 +1,12 @@
 Django
 addict
 celery
+celery_statsd
 cfgtool
 django-celery
 logtool
 path.py
 psutil
-pyver
 qeventlog
 rainbow-logging-handler
 raven

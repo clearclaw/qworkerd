@@ -9,6 +9,7 @@ amqp==1.4.6               # via kombu, qeventlog
 anyjson==0.3.3            # via kombu, qeventlog
 architect==0.5.1          # via qeventlog
 billiard==3.3.0.20        # via celery, qeventlog
+celery-statsd==0.1.1
 celery==3.1.18
 cfgtool==0.1.17
 clip.py==0.3.0            # via cfgtool, qeventlog
@@ -24,11 +25,11 @@ path.py==7.4
 psutil==3.1.1
 psycopg2==2.6.1           # via qeventlog
 pytz==2015.4              # via celery, qeventlog
-pyver==1.0.31
 qeventlog==0.1.57
 rainbow-logging-handler==2.2.2
 raven==5.5.0
 retryp==0.1.12            # via qeventlog
 six==1.9.0                # via cfgtool, configobj, qeventlog
+statsd==3.1               # via celery-statsd
 termcolor==1.1.0
 wrapt==1.10.5             # via cfgtool, logtool, qeventlog, retryp
