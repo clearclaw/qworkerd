@@ -7,7 +7,7 @@ django-celery
 logtool
 path.py
 psutil
-qeventlog
+qlogtask
 rainbow-logging-handler
 raven
 termcolor

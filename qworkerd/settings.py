@@ -122,7 +122,7 @@ CELERY_WORKER_DIRECT = True
 CELERY_DEFAULT_QUEUE = "qworkerd"
 
 # A sequence of modules to import when the worker starts.
-CELERY_IMPORTS = ("qeventlog.qetask", "celery_statsd")
+CELERY_IMPORTS = ("qlogtask", "celery_statsd")
 
 # Exact same semantics as CELERY_IMPORTS, but can be used as a means
 # to have different import categories.
