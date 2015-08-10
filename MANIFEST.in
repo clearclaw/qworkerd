@@ -1,2 +1,4 @@
 include README.rst
 include requirements.txt
+include versioneer.py
+include qworkerd/_version.py
