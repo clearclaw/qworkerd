@@ -72,7 +72,7 @@ CELERY_ACKS_LATE = True
 # CELERY_RESULT_PERSISTENT = True
 
 # Send events so the worker can be monitored by tools like celerymon.
-CELERY_SEND_EVENTS = True
+# CELERY_SEND_EVENTS = True
 
 # If enabled, a task-sent event will be sent for every task so tasks
 # can be tracked before they are consumed by a worker.
