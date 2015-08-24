@@ -10,4 +10,5 @@ psutil
 qlogtask
 rainbow-logging-handler
 raven
+statsd
 termcolor
