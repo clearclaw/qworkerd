@@ -1,0 +1,12 @@
+pyroma:
+  run: true
+
+pyroma:
+  run: true
+
+#vulture:
+#  run: true
+
+pep8:
+  options:
+    max-line-length: 80
