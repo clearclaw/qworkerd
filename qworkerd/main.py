@@ -15,7 +15,7 @@ app.autodiscover_tasks (lambda: settings.INSTALLED_APPS)
 app.set_current ()
 
 @setup_logging.connect
-#@logtool.log_call
+@logtool.log_call
 def setup_logging_handler (**kwargs): # pylint: disable=W0613
   logging.config.fileConfig (DEFAULT_LOGCONF,
                              disable_existing_loggers = False)
@@ -50,21 +50,7 @@ def status ():
     rc["disk"]["io"] = {
       disk: io
     }
-  for proc in psutil.process_iter ():
-    if proc.username == settings.UNIX_USER:
-      rc["process"]["proc.pid"] = {
-        "name": proc.name,
-        "exe": proc.exe,
-        "cmdline": proc.cmdline,
-        "create_time": proc.create_time (),
-        "since":  logtool.time_str (proc.create_time (), slug = True),
-        "status": proc.status (),
-        "cpu.times": proc.cpu_times (),
-        "cpu.percent": proc.cpu_percent (),
-        "memory.info": proc.memory_info_ex (),
-        "percent": proc.memory_percent (),
-      }
   return rc
 
 if __name__ == "__main__":
-  app.start()
+  app.start ()
