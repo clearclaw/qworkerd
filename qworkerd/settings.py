@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 
-import logging, logtool, sys
+import importlib, logging, logtool, sys
+from kombu import Exchange, Queue
 
 LOG = logging.getLogger (__name__)
 
@@ -113,6 +114,10 @@ CELERYD_TASK_SOFT_TIME_LIMIT = 12 * 60 * 60
 # used for sending and retrieving results.
 # CELERY_REDIS_MAX_CONNECTIONS =
 
+# If enabled (default), any queues specified that are not defined in
+# CELERY_QUEUES will be automatically created.
+CELERY_CREATE_MISSING_QUEUES = True
+
 # This option enables so that every worker has a dedicated queue, so
 # that tasks can be routed to specific workers.
 CELERY_WORKER_DIRECT = True
@@ -120,6 +125,14 @@ CELERY_WORKER_DIRECT = True
 # The name of the default queue used by .apply_async if the message
 # has no route or no custom queue has been specified.
 CELERY_DEFAULT_QUEUE = "qworkerd"
+
+# CELERY_QUEUES is a list of Queue instances. If you don't set the
+# exchange or exchange type values for a key, these will be taken from
+# the CELERY_DEFAULT_EXCHANGE and CELERY_DEFAULT_EXCHANGE_TYPE
+# settings.
+CELERY_QUEUES = [
+  Queue ("qworkerd", Exchange ("qworkerd"), routing_key = "qworkerd"),
+]
 
 # A sequence of modules to import when the worker starts.
 CELERY_IMPORTS = ("qlogtask", "celery_statsd")
@@ -145,6 +158,7 @@ execfile (EXTERNAL_CONFIG)
 
 DESIRED_VARIABLES = [
   "CELERY_DEFAULT_QUEUE",
+  "CELERY_QUEUES",
   "CELERY_RESULT_BACKEND",
   "SECRET_KEY",
   "LOGGING",
@@ -160,7 +174,6 @@ REQUIRED_VARIABLES = [
 ]
 
 # Add the task's settings
-import importlib
 for n in CELERY_INCLUDE:
   mod = importlib.import_module (n + ".settings")
   mod.install ()
