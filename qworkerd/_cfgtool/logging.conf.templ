@@ -1,5 +1,5 @@
 [loggers]
-keys = boto, django, django.db.backends, django.request, kombu.pidbox, logtool, requests, root, statsd
+keys = boto, kombu, logtool, root
 
 [handlers]
 keys = console, console_colour, syslog
@@ -8,92 +8,44 @@ keys = console, console_colour, syslog
 keys = generic, colour
 
 [logger_root]
-level = DEBUG
-handlers = ${qworkerd_log_handler}
+level = ${qworkerd.log_level}
+handlers = ${qworkerd.log_handler}
 
 [logger_logtool]
-level = DEBUG
-handlers = ${qworkerd_log_handler}
+level = ${qworkerd.log_level_logtool}
+handlers = ${qworkerd.log_handler}
 qualname = logtool
 propagate = 0
 
-[logger_logtool.log_wrap]
-level = DEBUG
-handlers = ${qworkerd_log_handler}
-qualname = logtool.log_wrap
-propagate = 0
-
-[logger_logtool.log_fault_impl]
-level = DEBUG
-handlers = ${qworkerd_log_handler}
-qualname = logtool.log_fault_impl
-propagate = 0
-
-[logger_requests]
-level = DEBUG
-handlers = ${qworkerd_log_handler}
-qualname = requests
-propagate = 0
-
 [logger_boto]
-level = INFO
-handlers = ${qworkerd_log_handler}
+level = WARN
+handlers = ${qworkerd.log_handler}
 qualname = boto
 propagate = 0
 
-[logger_statsd]
+[logger_kombu]
 level = WARN
-handlers = ${qworkerd_log_handler}
-qualname = statsd
-propagate = 0
-
-[logger_django]
-level = DEBUG
-handlers = ${qworkerd_log_handler}
-qualname = django
-propagate = 1
-
-[logger_django.db]
-level = DEBUG
-handlers = ${qworkerd_log_handler}
-qualname = django.db
-propagate = 0
-
-[logger_django.db.backends]
-level = DEBUG
-handlers = ${qworkerd_log_handler}
-qualname = django.db.backends
-propagate = 0
-
-[logger_django.request]
-level = DEBUG
-handlers = ${qworkerd_log_handler}
-qualname = django.request
-propagate = 0
-
-[logger_kombu.pidbox]
-level = INFO
-handlers = console_colour
-qualname = django.db.backends
+handlers = ${qworkerd.log_handler}
+qualname = kombu
 propagate = 0
 
 [handler_console]
 class = StreamHandler
-level = DEBUG
+level = ${qworkerd.log_level}
 formatter = generic
 args = ()
 
 [handler_console_colour]
 class = rainbow_logging_handler.RainbowLoggingHandler
 stream = sys.stderr
-level = DEBUG
+level = ${qworkerd.log_level}
 args = (sys.stderr, "")
 
 [handler_syslog]
 class = handlers.SysLogHandler
-level = DEBUG
+level = ${qworkerd.log_level}
 formatter = generic
-args = (('127.0.0.1', handlers.SYSLOG_UDP_PORT), handlers.SysLogHandler.LOG_LOCAL3)
+args = (("${qworkerd.syslog_host}", handlers.SYSLOG_UDP_PORT), handlers.SysLogHandler.LOG_${qworkerd.syslog_facility})
 
 [formatter_generic]
 class = logging.Formatter
