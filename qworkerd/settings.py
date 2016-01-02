@@ -12,6 +12,9 @@ BASE_DIR = os.path.dirname (os.path.dirname (__file__))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "McmillanCompressorsBennyCalifChromingFoundersDisassociates"
 
+# Django now insists on this
+ROOT_URLCONF = "qworkerd.urls"
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
@@ -189,3 +192,4 @@ missing = check_vars (REQUIRED_VARIABLES, vars ())
 if missing:
   print >> sys.stderr, "Missing required configurations: %s" % missing
   sys.exit ()
+
