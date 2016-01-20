@@ -3,7 +3,6 @@ addict
 celery
 celery_statsd
 cfgtool
-django-celery
 logtool
 path.py
 psutil

@@ -21,8 +21,6 @@ DEBUG = False
 # Application definition
 INSTALLED_APPS = (
   "raven.contrib.django.raven_compat",
-  "djcelery",
-
   "qworkerd",
 )
 MIDDLEWARE_CLASSES = ()

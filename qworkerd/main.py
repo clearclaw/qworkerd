@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 
-import logging, logtool, os, psutil, socket
+import django, logging, logtool, os, psutil, socket
 from celery import Celery
 from celery.signals import setup_logging
 from django.conf import settings
@@ -8,6 +8,7 @@ from django.conf import settings
 LOG = logging.getLogger (__name__)
 DEFAULT_LOGCONF = "/etc/qworkerd/logging.conf"
 
+django.setup ()
 os.environ.setdefault ("DJANGO_SETTINGS_MODULE", "qworkerd.settings")
 app = Celery ("qworkerd")
 app.config_from_object ("django.conf:settings")
