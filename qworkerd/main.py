@@ -50,7 +50,7 @@ def sentry_exception (e, request, message = None):
     logtool.log_fault (ee, message = "FAULT: Problem logging exception.")
 
 @logtool.log_call
-def retry_handler (task, e):
+def retry_handler (task, e, fail_handler = None):
   try:
     LOG.info ("Retrying.  Attempt: #%s", task.request.retries)
     raise task.retry (exc = e, max_retries = settings.FAIL_RETRYCOUNT,
@@ -60,6 +60,8 @@ def retry_handler (task, e):
     raise
   except: # pylint: disable=W0702
     LOG.error ("Max retries reached: %s  GIVING UP!", task.request.retries)
+    if fail_handler:
+      fail_handler ()
     sentry_exception (e, task.request)
     raise
 
