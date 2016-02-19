@@ -1,7 +1,9 @@
 #! /usr/bin/env python
 
-import django, logging, logtool, os, psutil, socket
+import django, logging, logtool, os, psutil
+import raven, raven.transport.http, socket, sys
 from celery import Celery
+from celery.exceptions import Retry
 from celery.signals import setup_logging
 from django.conf import settings
 
@@ -20,6 +22,46 @@ app.set_current ()
 def setup_logging_handler (**kwargs): # pylint: disable=W0613
   logging.config.fileConfig (DEFAULT_LOGCONF,
                              disable_existing_loggers = False)
+
+@logtool.log_call
+def sentry_exception (e, request, message = None):
+  """Yes, this eats exceptions"""
+  sentry_tags = {"component": settings.APPLICATION_NAME}
+  try:
+    sentry = raven.Client (settings.RAVEN_CONFIG["dsn"],
+                           auto_log_stacks = True,
+                           release = settings.APPLICATION_VERSION,
+                           transport = raven.transport.http.HTTPTransport)
+    logtool.log_fault (e, message = message)
+    data = {
+      "job": request,
+    }
+    if message:
+      data["message"] = message
+    sentry.extra_context (data)
+    if e is not None:
+      einfo = sys.exc_info ()
+      rc = sentry.captureException (einfo, **sentry_tags)
+      del einfo
+    else:
+      rc = sentry.capture (**sentry_tags)
+    LOG.error ("Sentry filed: %s", rc)
+  except Exception as ee:
+    logtool.log_fault (ee, message = "FAULT: Problem logging exception.")
+
+@logtool.log_call
+def retry_handler (task, e):
+  try:
+    LOG.info ("Retrying.  Attempt: #%s", task.request.retries)
+    raise task.retry (exc = e, max_retries = settings.FAIL_RETRYCOUNT,
+                      countdown = (settings.FAIL_WAITTIME
+                                   * (task.request.retries + 1)))
+  except Retry: # Why yes, we're retrying
+    raise
+  except: # pylint: disable=W0702
+    LOG.error ("Max retries reached: %s  GIVING UP!", task.request.retries)
+    sentry_exception (e, task.request)
+    raise
 
 @app.task
 @logtool.log_call

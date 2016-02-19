@@ -32,3 +32,6 @@ CELERYD_TASK_SOFT_TIME_LIMIT = ${qworkerd.job_time_warning}
 
 # A sequence of modules to import when the worker starts.
 CELERY_INCLUDE = "${qworkerd.job_include}".split (",")
+
+# Application name to use in Sentry
+APPLICATION_NAME = ${qworkerd.application_name}

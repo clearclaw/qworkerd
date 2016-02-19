@@ -151,6 +151,9 @@ CELERYD_STATS_PREFIX = "qworkerd."
 TIME_ZONE = "UTC"
 USE_TZ = False
 
+# Name for the application in Sentry
+APPLICATION_NAME = "qworkerd"
+
 LOGGING = "/etc/qworkerd/logging.conf"
 LOGGING_CONFIG = "qworkerd.logs.logging_loader"
 
@@ -158,6 +161,7 @@ EXTERNAL_CONFIG = "/etc/qworkerd/qworkerd.conf"
 execfile (EXTERNAL_CONFIG)
 
 DESIRED_VARIABLES = [
+  "APPLICATION_NAME",
   "CELERY_DEFAULT_QUEUE",
   "CELERY_QUEUES",
   "CELERY_RESULT_BACKEND",
