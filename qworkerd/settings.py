@@ -1,7 +1,13 @@
 #! /usr/bin/env python
 
+from __future__ import absolute_import
 import importlib, logging, logtool, sys
 from kombu import Exchange, Queue
+
+from ._version import get_versions
+VERSION = get_versions ()['version']
+# __version_info__ = get_versions ()
+del get_versions
 
 LOG = logging.getLogger (__name__)
 
@@ -153,6 +159,7 @@ USE_TZ = False
 
 # Name for the application in Sentry
 APPLICATION_NAME = "qworkerd"
+APPLICATION_VERSION = "qworkerd: %s" % VERSION
 
 LOGGING = "/etc/qworkerd/logging.conf"
 LOGGING_CONFIG = "qworkerd.logs.logging_loader"
@@ -162,6 +169,7 @@ execfile (EXTERNAL_CONFIG)
 
 DESIRED_VARIABLES = [
   "APPLICATION_NAME",
+  "APPLICATION_VERSION",
   "CELERY_DEFAULT_QUEUE",
   "CELERY_QUEUES",
   "CELERY_RESULT_BACKEND",
