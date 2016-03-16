@@ -159,7 +159,7 @@ USE_TZ = False
 
 # Name for the application in Sentry
 APPLICATION_NAME = "qworkerd"
-APPLICATION_VERSION = "qworkerd: %s" % VERSION
+APPLICATION_VERSION = VERSION
 
 LOGGING = "/etc/qworkerd/logging.conf"
 LOGGING_CONFIG = "qworkerd.logs.logging_loader"

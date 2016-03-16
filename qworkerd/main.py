@@ -30,7 +30,8 @@ def sentry_exception (e, request, message = None):
   try:
     sentry = raven.Client (settings.RAVEN_CONFIG["dsn"],
                            auto_log_stacks = True,
-                           release = settings.APPLICATION_VERSION,
+                           release = "%s: %s" % (settings.APPLICATION_NAME,
+                                                 settings.APPLICATION_VERSION)
                            transport = raven.transport.http.HTTPTransport)
     logtool.log_fault (e, message = message)
     data = {
