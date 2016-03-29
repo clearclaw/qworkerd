@@ -5,7 +5,7 @@ import glob, versioneer
 
 setup (
     name = "qworkerd",
-    version = versioneer.get_version (),                
+    version = versioneer.get_version (),
     description = "Celery based worker (default/pluggable)",
     long_description = file ("README.rst").read (),
     cmdclass = versioneer.get_cmdclass (),
@@ -29,13 +29,13 @@ setup (
     data_files = [
         ("/etc/cfgtool/module.d/", ["qworkerd/_cfgtool/qworkerd",]),
         ("/etc/qworkerd", glob.glob ("qworkerd/_cfgtool/*.templ")),
-        ("./bin", ["qworkerd/qworkerd_manage.py"]),
     ],
     zip_safe = False,
     install_requires = [line.strip ()
                         for line in file ("requirements.txt").readlines ()],
     entry_points = {
         "console_scripts": [
+          "qworkerd_manage = manage:main"
         ],
     },
 )
