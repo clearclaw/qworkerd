@@ -3,7 +3,7 @@
 # Where is RabbitMQ?
 BROKER_URL = "${qworkerd.broker_url}"
 
-# The backend used to store task results (tombstones). 
+# The backend used to store task results (tombstones).
 # CELERY_RESULT_BACKEND = "db+mysql://root:root@localhost/qeventlog"
 # CELERY_RESULT_BACKEND = "cache+memcached://127.0.0.1:11211/"
 CELERY_RESULT_BACKEND = "${qworkerd.result_backend}"
@@ -13,7 +13,7 @@ SECRET_KEY = "${qworkerd.secret_key}"
 
 # Entry for logging exceptions to Sentry
 RAVEN_CONFIG = {
-  "dsn": "sync+${qworkerd.sentry_dsn}",
+  "dsn": "${qworkerd.sentry_dsn}",
 }
 
 # Number of simultaneous jobs to run on the worker
