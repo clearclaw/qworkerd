@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 
 from __future__ import absolute_import
-import importlib, logging, logtool, sys
+import importlib, itertools, logging, logtool, sys
 from kombu import Exchange, Queue
 
 from ._version import get_versions
@@ -186,10 +186,25 @@ REQUIRED_VARIABLES = [
   "CELERY_INCLUDE",
 ]
 
-# Add the task's settings
+# Add the plug-in settings
 for n in CELERY_INCLUDE:
+  INSTALLED_APPS += (n,)
   mod = importlib.import_module (n + ".settings")
-  mod.install ()
+  # Update local dictionaries
+  for var in getattr (mod, "UPDATE_VARS", []):
+    if var in vars ():
+      vars ()[var].update (getattr (mod, var))
+    else:
+      vars ()[var] = getattr (mod, var)
+  # Extend local lists
+  for var in itertools.chain (getattr (mod, "EXTEND_VARS", []),
+                              ["DESIRED_VARIABLES", "REQUIRED_VARIABLES",]):
+    if var in vars ():
+      vars ()[var].extend (getattr (mod, var))
+    else:
+      vars ()[var] = getattr (mod, var)
+  for var in getattr (mod, "EXPORT_VARS", []):
+    vars ()[var] = getattr (mod, var)
 
 @logtool.log_call
 def check_vars (wanted, provided):
@@ -202,4 +217,3 @@ missing = check_vars (REQUIRED_VARIABLES, vars ())
 if missing:
   print >> sys.stderr, "Missing required configurations: %s" % missing
   sys.exit ()
-
