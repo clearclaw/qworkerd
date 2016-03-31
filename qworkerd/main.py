@@ -57,9 +57,7 @@ def sentry_exception (e, request, message = None):
 def retry_handler (task, e, fail_handler = None):
   try:
     LOG.info ("Retrying.  Attempt: #%s", task.request.retries)
-    raise task.retry (exc = e, max_retries = settings.FAIL_RETRYCOUNT,
-                      countdown = (settings.FAIL_WAITTIME
-                                   * (task.request.retries + 1)))
+    raise task.retry (exc = e)
   except Retry: # Why yes, we're retrying
     raise
   except: # pylint: disable=W0702
