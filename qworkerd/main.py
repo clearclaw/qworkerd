@@ -33,7 +33,7 @@ def sentry_exception (e, request, message = None):
                            release = "%s: %s" % (settings.APPLICATION_NAME,
                                                  settings.APPLICATION_VERSION),
                            transport = raven.transport.http.HTTPTransport)
-    logtool.log_fault (e, message = message)
+    logtool.log_fault (e, message = message, level = logging.INFO)
     data = {
       "job": request,
     }
@@ -48,7 +48,8 @@ def sentry_exception (e, request, message = None):
       rc = sentry.capture (**sentry_tags)
     LOG.error ("Sentry filed: %s", rc)
   except Exception as ee:
-    logtool.log_fault (ee, message = "FAULT: Problem logging exception.")
+    logtool.log_fault (ee, message = "FAULT: Problem logging exception.",
+                       level = logging.INFO)
 
 @logtool.log_call
 def retry_handler (task, e, fail_handler = None):
@@ -86,7 +87,6 @@ def status ():
       "since": logtool.time_str (psutil.boot_time (), slug = True),
       },
     "disk": {},
-    "process": {},
     }
   for part in psutil.disk_partitions ():
     rc["disk"]["mounts"] = {
