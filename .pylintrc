@@ -8,11 +8,11 @@
 #init-hook=
 
 # Profiled execution.
-profile=no
+#profile=no
 
 # Add files or directories to the blacklist. They should be base names, not
 # paths.
-ignore=CVS
+ignore=CVS,_version.py
 
 # Pickle collected data for later comparisons.
 persistent=yes
@@ -38,7 +38,7 @@ load-plugins=
 # --enable=similarities". If you want to run only the classes checker, but have
 # no Warning level messages displayed, use"--disable=all --enable=classes
 # --disable=W"
-disable=W0142,W0703,R0201,C0111,E0211,I0011,C0326,C0103,C0330
+disable=W0142,W0703,R0201,C0111,E0211,I0011,C0326,C0103,C0330,C0410,C0411,C0413,C0410
 
 [REPORTS]
 
@@ -48,10 +48,10 @@ disable=W0142,W0703,R0201,C0111,E0211,I0011,C0326,C0103,C0330
 output-format=colorized
 
 # Include message's id in output
-include-ids=yes
+# include-ids=yes
 
 # Include symbolic ids of messages in output
-symbols=yes
+# symbols=yes
 
 # Put messages in a separate file for each module / package specified on the
 # command line instead of printing them on stdout. Reports (if any) will be
@@ -70,16 +70,16 @@ evaluation=10.0 - ((float(5 * error + warning + refactor + convention) / stateme
 
 # Add a comment according to your evaluation note. This is used by the global
 # evaluation report (RP0004).
-comment=no
+# comment=no
 
 # msg-template={path}:{line}: [{msg_id}({symbol}), {obj}] {msg}
-msg-template={C}:{line:3d},{column:2d}: {msg} ({symbol} - {msg_id})
+# msg-template={C}:{line:3d},{column:2d}: {msg} ({symbol} - {msg_id})
 msg-template={line} {msg} ({msg_id} - {symbol})
 
 [BASIC]
 
 # Required attributes for module, separated by a comma
-required-attributes=
+#required-attributes=
 
 # List of builtins function names that should not be used, separated by a comma
 bad-functions=map,filter,apply,input
@@ -169,7 +169,7 @@ ignored-classes=SQLObject
 
 # When zope mode is activated, add a predefined set of Zope acquired attributes
 # to generated-members.
-zope=no
+# zope=no
 
 # List of members which are set dynamically and missed by pylint inference
 # system, and so shouldn't trigger E0201 when accessed. Python regular
@@ -195,7 +195,7 @@ additional-builtins=
 
 # List of interface methods to ignore, separated by a comma. This is used for
 # instance to not check methods defines in Zope's Interface base class.
-ignore-iface-methods=isImplementedBy,deferred,extends,names,namesAndDescriptions,queryDescriptionFor,getBases,getDescriptionFor,getDoc,getName,getTaggedValue,getTaggedValueTags,isEqualOrExtendedBy,setTaggedValue,isImplementedByInstancesOf,adaptWith,is_implemented_by
+# ignore-iface-methods=isImplementedBy,deferred,extends,names,namesAndDescriptions,queryDescriptionFor,getBases,getDescriptionFor,getDoc,getName,getTaggedValue,getTaggedValueTags,isEqualOrExtendedBy,setTaggedValue,isImplementedByInstancesOf,adaptWith,is_implemented_by
 
 # List of method names used to declare (i.e. assign) instance attributes.
 defining-attr-methods=__init__,__new__,setUp

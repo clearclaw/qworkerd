@@ -191,20 +191,20 @@ for n in CELERY_INCLUDE:
   INSTALLED_APPS += (n,)
   mod = importlib.import_module (n + ".settings")
   # Update local dictionaries
-  for var in getattr (mod, "UPDATE_VARS", []):
-    if var in vars ():
-      vars ()[var].update (getattr (mod, var))
+  for v in getattr (mod, "UPDATE_VARS", []):
+    if v in vars ():
+      vars ()[v].update (getattr (mod, v))
     else:
-      vars ()[var] = getattr (mod, var)
+      vars ()[v] = getattr (mod, v)
   # Extend local lists
-  for var in itertools.chain (getattr (mod, "EXTEND_VARS", []),
+  for v in itertools.chain (getattr (mod, "EXTEND_VARS", []),
                               ["DESIRED_VARIABLES", "REQUIRED_VARIABLES",]):
-    if var in vars ():
-      vars ()[var].extend (getattr (mod, var))
+    if v in vars ():
+      vars ()[v].extend (getattr (mod, v))
     else:
-      vars ()[var] = getattr (mod, var)
-  for var in getattr (mod, "EXPORT_VARS", []):
-    vars ()[var] = getattr (mod, var)
+      vars ()[v] = getattr (mod, v)
+  for v in getattr (mod, "EXPORT_VARS", []):
+    vars ()[v] = getattr (mod, v)
 
 @logtool.log_call
 def check_vars (wanted, provided):

@@ -1,11 +1,13 @@
 #! /usr/bin/env python
 
+from __future__ import absolute_import
 import django, logging, logtool, os, psutil
 import raven, raven.transport.http, socket, sys
 from celery import Celery
 from celery.exceptions import Retry
 from celery.signals import setup_logging
 from django.conf import settings
+from .qwtask import QWTask
 
 LOG = logging.getLogger (__name__)
 DEFAULT_LOGCONF = "/etc/qworkerd/logging.conf"
@@ -67,9 +69,9 @@ def retry_handler (task, e, fail_handler = None):
     sentry_exception (e, task.request)
     raise
 
-@app.task
+@app.task (bind = True, base = QWTask)
 @logtool.log_call
-def status ():
+def status (self): # pylint: disable=unused-argument
   rc = {
     "hostname": socket.gethostname (),
     "cpu": {
