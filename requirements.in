@@ -1,0 +1,13 @@
+Django
+addict
+celery
+celery_statsd
+cfgtool
+logtool
+path.py
+psutil
+qlogtask
+rainbow-logging-handler
+raven
+statsd
+termcolor
