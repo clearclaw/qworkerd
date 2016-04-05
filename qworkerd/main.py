@@ -56,7 +56,7 @@ def sentry_exception (e, request, message = None):
 @logtool.log_call
 def retry_handler (task, e, fail_handler = None):
   try:
-    LOG.info ("Retrying.  Attempt: #%s", task.request.retries)
+    LOG.info ("Retrying.  Attempt: #%s  Delay: %d", task.request.retries, task.default_retry_delay)
     raise task.retry (exc = e)
   except Retry: # Why yes, we're retrying
     raise

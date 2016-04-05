@@ -4,6 +4,10 @@ from celery import Task
 
 class QWTask (Task):
 
+  #: If :const:`True` the task is an abstract base class.
+  #: Note: Also set this in derived clases?
+  abstract = True
+
   #: The name of a serializer that are registered with
   #: :mod:kombu.serialization.registry.  Default is 'pickle'.
   serializer = "json"
