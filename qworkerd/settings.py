@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 
 from __future__ import absolute_import
-import importlib, itertools, logging, logtool, sys
+import importlib, logging
 from kombu import Exchange, Queue
 
 from ._version import get_versions
@@ -197,23 +197,10 @@ for n in CELERY_INCLUDE:
     else:
       vars ()[v] = getattr (mod, v)
   # Extend local lists
-  for v in itertools.chain (getattr (mod, "EXTEND_VARS", []),
-                              ["DESIRED_VARIABLES", "REQUIRED_VARIABLES",]):
+  for v in getattr (mod, "EXTEND_VARS", []):
     if v in vars ():
       vars ()[v].extend (getattr (mod, v))
     else:
       vars ()[v] = getattr (mod, v)
   for v in getattr (mod, "EXPORT_VARS", []):
     vars ()[v] = getattr (mod, v)
-
-@logtool.log_call
-def check_vars (wanted, provided):
-  return [var for var in wanted if var not in provided]
-
-missing = check_vars (DESIRED_VARIABLES, vars ())
-if missing:
-  print >> sys.stderr, "Missing desired configurations: %s" % missing
-missing = check_vars (REQUIRED_VARIABLES, vars ())
-if missing:
-  print >> sys.stderr, "Missing required configurations: %s" % missing
-  sys.exit ()

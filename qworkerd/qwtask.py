@@ -2,7 +2,7 @@
 
 from celery import Task
 
-class QWTask (Task):
+class QWTask (Task): # pylint: disable=abstract-method
 
   #: If :const:`True` the task is an abstract base class.
   #: Note: Also set this in derived clases?
