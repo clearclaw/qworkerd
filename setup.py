@@ -35,7 +35,7 @@ setup (
                         for line in file ("requirements.txt").readlines ()],
     entry_points = {
         "console_scripts": [
-          "qworkerd_manage = manage:main"
+          "qworkerd_manage = qworkerd.manage:main"
         ],
     },
 )
