@@ -26,14 +26,24 @@ def setup_logging_handler (**kwargs): # pylint: disable=W0613
                              disable_existing_loggers = False)
 
 @logtool.log_call
-def sentry_exception (e, request, message = None):
+def _settings_value (sets, key, default):
+  if sets is not None and hasattr (sets, key):
+    return getattr (sets, key)
+  return getattr (settings, key, default)
+
+@logtool.log_call
+def sentry_exception (e, request, message = None, local_settings = None):
   """Yes, this eats exceptions"""
-  sentry_tags = {"component": settings.APPLICATION_NAME}
   try:
-    sentry = raven.Client (settings.RAVEN_CONFIG["dsn"],
+    app_name = _settings_value (local_settings, "APPLICATION_NAME", "qworkerd")
+    app_ver = _settings_value (local_settings, "APPLICATION_VERSION",
+                               "unknown-version")
+    sentry_dsn = _settings_value (local_settings, "SENTRY_DSN",
+                                  settings.RAVEN_CONFIG["dsn"])
+    sentry_tags = {"component": app_name}
+    sentry = raven.Client (sentry_dsn,
                            auto_log_stacks = True,
-                           release = "%s: %s" % (settings.APPLICATION_NAME,
-                                                 settings.APPLICATION_VERSION),
+                           release = "%s: %s" % (app_name, app_ver),
                            transport = raven.transport.http.HTTPTransport)
     logtool.log_fault (e, message = message, level = logging.INFO)
     data = {
@@ -56,7 +66,8 @@ def sentry_exception (e, request, message = None):
 @logtool.log_call
 def retry_handler (task, e, fail_handler = None):
   try:
-    LOG.info ("Retrying.  Attempt: #%s  Delay: %d", task.request.retries, task.default_retry_delay)
+    LOG.info ("Retrying.  Attempt: #%s  Delay: %d",
+              task.request.retries, task.default_retry_delay)
     raise task.retry (exc = e)
   except Retry: # Why yes, we're retrying
     raise
