@@ -40,7 +40,8 @@ def sentry_exception (e, request, message = None, local_settings = None):
                                "unknown-version")
     sentry_dsn = _settings_value (local_settings, "SENTRY_DSN",
                                   settings.RAVEN_CONFIG["dsn"])
-    sentry_tags = {"component": app_name}
+    sentry_tags = {"component": app_name,
+                   "version": app_ver}
     sentry = raven.Client (sentry_dsn,
                            auto_log_stacks = True,
                            release = "%s: %s" % (app_name, app_ver),
