@@ -2,12 +2,16 @@
 
 from __future__ import absolute_import
 import django, logging, logtool, os, psutil
-import raven, raven.transport.http, socket, sys
+import raven, raven.contrib.celery, raven.transport.http, socket, sys
 from celery import Celery
 from celery.exceptions import Retry
 from celery.signals import setup_logging
 from django.conf import settings
 from .qwtask import QWTask
+
+from ._version import get_versions
+__version__ = get_versions ()['version']
+del get_versions
 
 LOG = logging.getLogger (__name__)
 DEFAULT_LOGCONF = "/etc/qworkerd/logging.conf"
@@ -17,6 +21,10 @@ os.environ.setdefault ("DJANGO_SETTINGS_MODULE", "qworkerd.settings")
 app = Celery ("qworkerd")
 app.config_from_object ("django.conf:settings")
 app.autodiscover_tasks (lambda: settings.INSTALLED_APPS)
+SENTRY = raven.Client (settings.RAVEN_CONFIG["dsn"],
+                       auto_log_stacks = True,
+                       release = "%s: %s" % ("qworkerd", __version__),
+                       transport = raven.transport.http.HTTPTransport)
 app.set_current ()
 
 @setup_logging.connect
@@ -24,6 +32,8 @@ app.set_current ()
 def setup_logging_handler (**kwargs): # pylint: disable=W0613
   logging.config.fileConfig (DEFAULT_LOGCONF,
                              disable_existing_loggers = False)
+  raven.contrib.celery.register_logger_signal (SENTRY)
+  raven.contrib.celery.register_signal (SENTRY)
 
 @logtool.log_call
 def _settings_value (sets, key, default):
@@ -42,6 +52,7 @@ def sentry_exception (e, request, message = None, local_settings = None):
                                   settings.RAVEN_CONFIG["dsn"])
     sentry_tags = {"component": app_name,
                    "version": app_ver}
+    # Localise the Sentry for the plugin
     sentry = raven.Client (sentry_dsn,
                            auto_log_stacks = True,
                            release = "%s: %s" % (app_name, app_ver),
