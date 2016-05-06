@@ -60,6 +60,7 @@ def sentry_exception (e, task, message = None, local_settings = None):
     logtool.log_fault (e, message = message, level = logging.INFO)
     data = {
       "task": task,
+      "request": task.request,
     }
     if message:
       data["message"] = message
