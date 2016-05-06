@@ -42,7 +42,7 @@ def _settings_value (sets, key, default):
   return getattr (settings, key, default)
 
 @logtool.log_call
-def sentry_exception (e, request, message = None, local_settings = None):
+def sentry_exception (e, task, message = None, local_settings = None):
   """Yes, this eats exceptions"""
   try:
     app_name = _settings_value (local_settings, "APPLICATION_NAME", "qworkerd")
@@ -59,17 +59,14 @@ def sentry_exception (e, request, message = None, local_settings = None):
                            transport = raven.transport.http.HTTPTransport)
     logtool.log_fault (e, message = message, level = logging.INFO)
     data = {
-      "job": request,
+      "task": task,
     }
     if message:
       data["message"] = message
     sentry.extra_context (data)
-    if e is not None:
-      einfo = sys.exc_info ()
-      rc = sentry.captureException (einfo, **sentry_tags)
-      del einfo
-    else:
-      rc = sentry.capture (**sentry_tags)
+    einfo = sys.exc_info ()
+    rc = sentry.captureException (einfo, **sentry_tags)
+    del einfo
     LOG.error ("Sentry filed: %s", rc)
   except Exception as ee:
     logtool.log_fault (ee, message = "FAULT: Problem logging exception.",
@@ -87,7 +84,7 @@ def retry_handler (task, e, fail_handler = None):
     LOG.error ("Max retries reached: %s  GIVING UP!", task.request.retries)
     if fail_handler:
       fail_handler ()
-    sentry_exception (e, task.request)
+    sentry_exception (e, task)
     raise
 
 @app.task (bind = True, base = QWTask)
