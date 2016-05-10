@@ -76,7 +76,6 @@ def sentry_exception (e, task, message = None, local_settings = None):
         "kwargs": task.request.kwargs,
         "reply_to": task.request.reply_to,
         "retries": task.request.retries,
-        "root_id": task.request.root_id,
         "task": task.request.task,
         "taskset": task.request.taskset,
         "timelimit": task.request.timelimit,
