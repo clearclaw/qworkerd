@@ -103,6 +103,25 @@ CELERYD_TASK_TIME_LIMIT = 13 * 60 * 60
 # http://celery.readthedocs.org/en/latest/configuration.html#celeryd-task-soft-time-limit
 CELERYD_TASK_SOFT_TIME_LIMIT = 12 * 60 * 60
 
+# A retry policy is a mapping that controls how retries behave, and
+# can contain the following keys:
+# max_retries -- Maximum number of retries before giving up, in this
+# case the exception that caused the retry to fail will be raised. A
+# value of 0 or None means it will retry forever. The default is to
+# retry 3 times.
+# interval_start -- Defines the number of seconds (float or integer)
+# to wait between retries. Default is 0, which means the first retry
+# will be instantaneous.
+# interval_step -- On each consecutive retry this number will be added
+# to the retry delay (float or integer). Default is 0.2.
+# interval_max -- Maximum number of seconds (float or integer) to wait
+# between retries. Default is 0.2.
+
+CELERY_TASK_PUBLISH_RETRY_POLICY = {"max_retries": 30,
+                                    "interval_start": 10,
+                                    "interval_step": 60,
+                                    "interval_max": 600}
+
 ## # This setting can be used to rewrite any task attribute from the
 ## # configuration. The setting can be a dict, or a list of annotation
 ## # objects that filter for tasks and return a map of attributes to
