@@ -94,7 +94,7 @@ def sentry_exception (e, task, message = None, local_settings = None):
                        level = logging.INFO)
 
 @logtool.log_call
-def retry_handler (task, e, fail_handler = None):
+def retry_handler (task, e, fail_handler = None, local_settings = None):
   try:
     LOG.info ("Retrying.  Attempt: #%s  Delay: %d",
               task.request.retries, task.default_retry_delay)
@@ -102,10 +102,11 @@ def retry_handler (task, e, fail_handler = None):
   except Retry: # Why yes, we're retrying
     raise
   except: # pylint: disable=W0702
-    LOG.error ("Max retries reached: %s  GIVING UP!", task.request.retries)
+    m = "Max retries reached: %s  GIVING UP!" % task.request.retries
+    LOG.error (m)
     if fail_handler:
       fail_handler ()
-    sentry_exception (e, task)
+    sentry_exception (e, task, message = m, local_settings = local_settings)
     raise
 
 @app.task (bind = True, base = QWTask)
