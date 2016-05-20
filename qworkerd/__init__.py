@@ -6,4 +6,5 @@ __version__ = get_versions ()['version']
 __version_info__ = get_versions ()
 del get_versions
 
-from . import main, tasks
+from .retryhandler import retry_handler
+from .sentryhandler import sentry_handler

@@ -4,8 +4,8 @@ from __future__ import absolute_import
 import django, logging, logtool, os
 import raven, raven.contrib.celery, raven.transport.http
 from celery import Celery
-from celery.exceptions import Retry
 from celery.signals import setup_logging
+
 from . import settings
 
 LOG = logging.getLogger (__name__)
@@ -31,26 +31,6 @@ def setup_logging_handler (**kwargs): # pylint: disable=W0613
                              disable_existing_loggers = False)
   raven.contrib.celery.register_logger_signal (SENTRY)
   raven.contrib.celery.register_signal (SENTRY)
-
-@logtool.log_call
-def _settings_value (sets, key, default):
-  if sets is not None and hasattr (sets, key):
-    return getattr (sets, key)
-  return getattr (settings, key, default)
-
-@logtool.log_call
-def retry_handler (task, e, fail_handler = None):
-  try:
-    LOG.info ("Retrying.  Attempt: #%s  Delay: %d",
-              task.request.retries, task.default_retry_delay)
-    raise task.retry (exc = e)
-  except Retry: # Why yes, we're retrying
-    raise
-  except: # pylint: disable=W0702
-    LOG.error ("Max retries reached: %s  GIVING UP!", task.request.retries)
-    if fail_handler:
-      fail_handler ()
-    raise
 
 if __name__ == "__main__":
   app.start ()
